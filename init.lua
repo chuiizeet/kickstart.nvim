@@ -240,6 +240,24 @@ require('lazy').setup({
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
 
+  {
+    'melbaldove/llm.nvim',
+    dependencies = { 'nvim-neotest/nvim-nio' },
+    opts = {},
+    config = function()
+      vim.keymap.set('n', '<leader>g,', function()
+        require('llm').prompt { replace = false, service = 'openai' }
+      end, { desc = 'Prompt with openai' })
+      vim.keymap.set('v', '<leader>g,', function()
+        require('llm').prompt { replace = false, service = 'openai' }
+      end, { desc = 'Prompt with openai' })
+      vim.keymap.set('v', '<leader>g.', function()
+        require('llm').prompt { replace = true, service = 'openai' }
+      end, { desc = 'Prompt while replacing with openai' })
+    end,
+    -- keybinds for prompting with openai
+  },
+
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
