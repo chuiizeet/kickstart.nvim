@@ -4,4 +4,5 @@
 -- See the kickstart.nvim README for more information\
 return {
   require 'custom.plugins.flutter',
+  require 'custom.plugins.dingllm',
 }

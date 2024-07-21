@@ -240,24 +240,6 @@ require('lazy').setup({
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
 
-  {
-    'melbaldove/llm.nvim',
-    dependencies = { 'nvim-neotest/nvim-nio' },
-    opts = {},
-    config = function()
-      vim.keymap.set('n', '<leader>g,', function()
-        require('llm').prompt { replace = false, service = 'openai' }
-      end, { desc = 'Prompt with openai' })
-      vim.keymap.set('v', '<leader>g,', function()
-        require('llm').prompt { replace = false, service = 'openai' }
-      end, { desc = 'Prompt with openai' })
-      vim.keymap.set('v', '<leader>g.', function()
-        require('llm').prompt { replace = true, service = 'openai' }
-      end, { desc = 'Prompt while replacing with openai' })
-    end,
-    -- keybinds for prompting with openai
-  },
-
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
   --    require('gitsigns').setup({ ... })
@@ -810,6 +792,7 @@ require('lazy').setup({
   },
 
   { 'catppuccin/nvim', name = 'catppuccin', priority = 1000 },
+  { 'rebelot/kanagawa.nvim', name = 'kanagawa', priority = 1001 },
 
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
@@ -822,7 +805,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'retrobox'
+      vim.cmd.colorscheme 'kanagawa'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
