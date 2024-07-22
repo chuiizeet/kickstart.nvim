@@ -6,4 +6,5 @@ return {
   require 'custom.plugins.flutter',
   require 'custom.plugins.dingllm',
   require 'custom.plugins.indent-blankline',
+  require 'custom.plugins.luasnip',
 }

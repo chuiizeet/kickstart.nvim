@@ -1,0 +1,3 @@
+[submodule "snippets/flutter-riverpod-snippets"]
+	path = snippets/flutter-riverpod-snippets
+	url = git@github.com:RobertBrunhage/flutter-riverpod-snippets.git
