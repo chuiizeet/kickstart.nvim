@@ -11,15 +11,15 @@ return {
         element = 'repl',
         enabled = true,
         icons = {
-          disconnect = '',
-          run_last = '',
+          disconnect = '',
+          run_last = '',
           terminate = '⏹︎',
           pause = '⏸︎',
-          play = '',
+          play = '',
           step_into = '󰆹',
           step_out = '󰆸',
-          step_over = '',
-          step_back = '',
+          step_over = '',
+          step_back = '',
         },
       },
       floating = {
@@ -29,9 +29,9 @@ return {
         },
       },
       icons = {
-        collapsed = '',
-        expanded = '',
-        current_frame = '',
+        collapsed = '',
+        expanded = '',
+        current_frame = '',
       },
       layouts = {
         {
@@ -53,12 +53,26 @@ return {
           size = 10,
         },
       },
+      mappings = {
+        edit = 'e',
+        expand = { '<CR>', '<2-LeftMouse>' },
+        open = 'o',
+        remove = 'd',
+        repl = 'r',
+        toggle = 't',
+      },
+      element_mappings = {},
+      expand_lines = true,
+      force_buffers = true,
+      render = {
+        indent = 1,
+        max_value_lines = 100,
+      },
     }
 
     local dap, dapui = require 'dap', require 'dapui'
     local group = vim.api.nvim_create_augroup('dapui_config', { clear = true })
 
-    -- hide ~ in DAPUI
     vim.api.nvim_create_autocmd('BufWinEnter', {
       group = group,
       pattern = 'DAP*',
