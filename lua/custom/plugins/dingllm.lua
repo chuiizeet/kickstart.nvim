@@ -1,7 +1,7 @@
 -- NOTE: Too lazy to write my own script lmao
 return {
   {
-    'yacineMTB/dingllm.nvim',
+    'theloner68/dingllm.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       local system_prompt =

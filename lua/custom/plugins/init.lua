@@ -8,6 +8,7 @@ return {
   require 'custom.plugins.indent-blankline',
   require 'custom.plugins.luasnip',
   require 'custom.plugins.xcodebuild',
+  require 'custom.plugins.vim-visual-multi',
   -- require 'custom.plugins.nvim-autopairs',
   -- require 'custom.plugins.nvim-dap',
   -- require 'custom.plugins.nvim-dapui',
