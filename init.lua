@@ -565,7 +565,6 @@ require('lazy').setup({
       capabilities.textDocument.completion.completionItem.snippetSupport = true
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-      -- Define your language servers including Astro
       local servers = {
         clangd = {},
         black = {},
@@ -582,19 +581,23 @@ require('lazy').setup({
           },
         },
         astro = {
-          cmd = { 'astro', 'langserver', '--stdio' },
+          cmd = { 'astro-ls', '--stdio' },
           filetypes = { 'astro' },
-          root_dir = require('lspconfig.util').root_pattern('astro.config.mjs', '.git'),
-          settings = {
-            astro = {
-              diagnostics = {
-                enable = true,
-              },
+          init_options = {
+            typescript = {},
+          },
+        },
+        tailwindcss = {
+          filetypes = { 'html', 'astro', 'css', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+          init_options = {
+            userLanguages = {
+              astro = 'html',
             },
           },
         },
+        eslint = {},
+        ts_ls = {},
       }
-
       require('lspconfig').sourcekit.setup {}
 
       -- Ensure the servers and tools above are installed
@@ -614,7 +617,8 @@ require('lazy').setup({
       require('mason-lspconfig').setup {
         ensure_installed = {
           'astro',
-          'tsserver',
+          'ts_ls',
+          'eslint',
           'html',
           'cssls',
           'tailwindcss',
