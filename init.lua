@@ -220,7 +220,7 @@ vim.keymap.set('n', '<leader>gq', ':DiffviewClose<CR>', { desc = 'Close Diffview
 --
 -- -- ❌ Close current AI response
 -- vim.keymap.set('n', '<leader>aq', ':AvanteClose<CR>', { desc = 'Close current AI response' })
--- vim.keymap.set('n', '<leader>aC', ':AvanteClear<CR>', { desc = 'Clear Avante chat' })
+vim.keymap.set('n', '<leader>aq', ':AvanteClear<CR>', { desc = 'Clear Avante chat' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
