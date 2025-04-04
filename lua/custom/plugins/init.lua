@@ -12,6 +12,7 @@ return {
   require 'custom.plugins.lualine',
   require 'custom.plugins.diffview',
   require 'custom.plugins.avante',
+  require 'custom.plugins.notify',
   require 'custom.plugins.noice',
   -- require 'custom.plugins.nvim-autopairs',
   -- require 'custom.plugins.nvim-dap',
