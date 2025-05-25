@@ -13,6 +13,7 @@ return {
   require 'custom.plugins.avante',
   require 'custom.plugins.noice',
   require 'custom.plugins.markview',
+  require 'custom.plugins.alpha',
   require 'custom.plugins.snacks',
   -- require 'custom.plugins.nvim-autopairs',
   -- require 'custom.plugins.nvim-dap',
