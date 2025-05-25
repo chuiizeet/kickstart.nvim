@@ -878,12 +878,6 @@ require('lazy').setup({
     end,
   },
   { 'rebelot/kanagawa.nvim', name = 'kanagawa', priority = 1001 },
-  {
-    'scottmckendry/cyberdream.nvim',
-    lazy = false,
-    name = 'cyberdream',
-    priority = 1002,
-  },
 
   -- { -- You can easily change to a different colorscheme.
   --   -- Change the name of the colorscheme plugin below, and then
