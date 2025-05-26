@@ -15,6 +15,7 @@ return {
   require 'custom.plugins.markview',
   require 'custom.plugins.alpha',
   require 'custom.plugins.snacks',
+  require 'custom.plugins.bufferline',
   -- require 'custom.plugins.nvim-autopairs',
   -- require 'custom.plugins.nvim-dap',
   -- require 'custom.plugins.nvim-dapui',
