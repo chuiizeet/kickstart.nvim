@@ -860,24 +860,34 @@ require('lazy').setup({
   },
 
   {
-    'catppuccin/nvim',
-    name = 'catppuccin',
-    priority = 1000, -- Asegúrate de cargar este plugin antes que otros
+    'ellisonleao/gruvbox.nvim',
+    priority = 1000,
     config = function()
-      require('catppuccin').setup {
-        transparent_background = true, -- Activa el fondo transparente
-        -- Otras opciones de configuración del tema...
+      require('gruvbox').setup {
+        terminal_colors = true,
+        undercurl = true,
+        underline = true,
+        bold = true,
+        italic = {
+          strings = true,
+          emphasis = true,
+          comments = true,
+          operators = false,
+          folds = true,
+        },
+        contrast = 'hard', -- o "soft" o "medium"
+        transparent_mode = true,
       }
-      vim.cmd.colorscheme 'catppuccin'
 
-      -- Opcional: sobrescribir algunos highlights para que se apliquen en ventanas flotantes o plugins como Neotree.
+      vim.cmd.colorscheme 'gruvbox'
+
+      -- Opcional: override para ventanas flotantes o plugins
       vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
       vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
       vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = 'none' })
       vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = 'none' })
     end,
   },
-  { 'rebelot/kanagawa.nvim', name = 'kanagawa', priority = 1001 },
 
   -- { -- You can easily change to a different colorscheme.
   --   -- Change the name of the colorscheme plugin below, and then

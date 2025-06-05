@@ -5,7 +5,7 @@ return {
     config = function()
       require('lualine').setup {
         options = {
-          theme = 'catppuccin', -- Cambia al theme que prefieras (gruvbox, catppuccin, etc)
+          theme = 'gruvbox', -- Cambia al theme que prefieras (gruvbox, catppuccin, etc)
           component_separators = { left = '', right = '' },
           section_separators = { left = '', right = '' },
           icons_enabled = true,

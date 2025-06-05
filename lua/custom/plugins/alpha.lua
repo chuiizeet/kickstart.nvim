@@ -83,7 +83,7 @@ return {
     local function create_footer()
       local stats = get_enhanced_stats()
       local footer_lines = {
-        '⚡ make beautiful thigs! ⚡',
+        '⚡ Make beautiful thigs! ⚡',
       }
 
       -- Plugins info con terminología eléctrica
@@ -118,7 +118,6 @@ return {
 
       -- Info adicional con energía eléctrica
       table.insert(footer_lines, string.format('🎯 Neovim %s', vim.version().major .. '.' .. vim.version().minor))
-      table.insert(footer_lines, '💛 Electrifying your code with pure energy! 💛')
 
       return footer_lines
     end
