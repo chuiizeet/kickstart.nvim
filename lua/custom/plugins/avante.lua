@@ -3,15 +3,18 @@ return {
   event = 'VeryLazy',
   version = false, -- Never set this value to "*"! Never!
   opts = {
-    -- add any opts here
-    -- for example
     provider = 'claude',
-    claude = {
-      endpoint = 'https://api.anthropic.com',
-      model = 'claude-3-7-sonnet-20250219',
-      timeout = 30000, -- Timeout in milliseconds
-      temperature = 0,
-      max_tokens = 4096,
+    providers = {
+
+      claude = {
+        endpoint = 'https://api.anthropic.com',
+        model = 'claude-3-7-sonnet-20250219',
+        extra_request_body = {
+          timeout = 30000, -- Timeout in milliseconds
+          temperature = 0,
+          max_tokens = 8192,
+        },
+      },
     },
   },
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
