@@ -473,6 +473,12 @@ require('lazy').setup({
       -- used for completion, annotations and signatures of Neovim apis
       { 'folke/neodev.nvim', opts = {} },
     },
+    opts = function(_, opts)
+      local esp32 = require 'esp32'
+      opts.servers = opts.servers or {}
+      opts.servers.clangd = esp32.lsp_config()
+      return opts
+    end,
     config = function()
       -- Brief aside: **What is LSP?**
       --

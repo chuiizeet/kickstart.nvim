@@ -16,6 +16,7 @@ return {
   require 'custom.plugins.snacks',
   require 'custom.plugins.bufferline',
   require 'custom.plugins.noice',
+  require 'custom.plugins.esp',
   -- require 'custom.plugins.nvim-autopairs',
   -- require 'custom.plugins.nvim-dap',
   -- require 'custom.plugins.nvim-dapui',
