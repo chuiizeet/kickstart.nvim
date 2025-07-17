@@ -1115,6 +1115,13 @@ require('lazy').setup({
   },
 })
 
+-- NOTE: Delete comments
+vim.api.nvim_create_user_command('DeleteComments', function()
+  vim.cmd [[g/^\s*\/\/\|^\s*\/\*/d]]
+end, {
+  desc = 'Delete all comments in the current buffer',
+})
+
 -- Remove bg to show my waifu
 vim.cmd [[highlight Normal guibg=none]]
 -- The line beneath this is called `modeline`. See `:help modeline`
