@@ -11,7 +11,6 @@ return {
   require 'custom.plugins.lualine',
   require 'custom.plugins.diffview',
   require 'custom.plugins.avante',
-  require 'custom.plugins.markview',
   require 'custom.plugins.alpha',
   require 'custom.plugins.snacks',
   require 'custom.plugins.bufferline',
