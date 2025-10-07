@@ -197,28 +197,21 @@ vim.keymap.set('n', '<leader>gq', ':DiffviewClose<CR>', { desc = 'Close Diffview
 
 -- NOTE: Avante keymaps
 --
----- 🤖 Ask the AI
 -- vim.keymap.set('n', '<leader>ai', ':AvanteAsk<CR>', { desc = 'Ask AI' })
 -- vim.keymap.set('v', '<leader>ai', ':AvanteAsk<CR>', { desc = 'Ask AI (visual selection)' })
 --
--- -- 🧠 Explain selected code
 -- vim.keymap.set('v', '<leader>ax', ':AvanteAsk Explain this code<CR>', { desc = 'Explain code with AI' })
 --
--- -- ✨ Rewrite selected code
 -- vim.keymap.set('v', '<leader>ae', ':AvanteEdit<CR>', { desc = 'Rewrite code with AI' })
 --
--- -- 📚 Document code
 -- vim.keymap.set('v', '<leader>ad', ':AvanteDoc<CR>', { desc = 'Document code with AI' })
 -- vim.keymap.set('n', '<leader>ad', ':AvanteDoc<CR>', { desc = 'Document current line with AI' })
 --
--- -- 🧪 Generate test cases
 -- vim.keymap.set('n', '<leader>at', ':AvanteTest<CR>', { desc = 'Generate test (normal mode)' })
 -- vim.keymap.set('v', '<leader>at', ':AvanteTest<CR>', { desc = 'Generate test (visual selection)' })
 --
--- -- 📄 View AI response history
 -- vim.keymap.set('n', '<leader>ah', ':AvanteHistory<CR>', { desc = 'View Avante history' })
 --
--- -- ❌ Close current AI response
 -- vim.keymap.set('n', '<leader>aq', ':AvanteClose<CR>', { desc = 'Close current AI response' })
 vim.keymap.set('n', '<leader>aq', ':AvanteClear<CR>', { desc = 'Clear Avante chat' })
 
@@ -230,6 +223,7 @@ vim.keymap.set('n', '<leader>fq', '<cmd>FlutterQuit<CR>', { desc = 'Quit Flutter
 vim.keymap.set('n', '<leader>fR', '<cmd>FlutterRestart<CR>', { desc = 'Hot Restart' })
 vim.keymap.set('n', '<leader>fh', '<cmd>FlutterHotReload<CR>', { desc = 'Hot Reload' })
 vim.keymap.set('n', '<leader>fl', '<cmd>FlutterLogClear<CR>', { desc = 'Clear Logs' })
+vim.keymap.set('n', '<leader>ft', '<cmd>FlutterLogToggle<CR>', { desc = 'Toggle log window' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
