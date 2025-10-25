@@ -1116,7 +1116,74 @@ end, {
   desc = 'Delete all comments in the current buffer',
 })
 
--- Remove bg to show my waifu
+-- NOTE: Insert Rel path for some llms
+vim.api.nvim_create_user_command('InsertRelPath', function()
+  local buf = vim.api.nvim_get_current_buf()
+
+  local filepath = vim.fn.expand '%:p'
+  local cwd = vim.fn.getcwd()
+  local relpath = filepath:gsub('^' .. vim.pesc(cwd), '')
+  if relpath == '' then
+    relpath = '/' .. vim.fn.expand '%:t'
+  end
+
+  -- 2️⃣ Filetype
+  local ft = vim.bo.filetype
+
+  local comment_prefix_by_ft = {
+    c = '//',
+    cpp = '//',
+    h = '//',
+    hpp = '//',
+    java = '//',
+    kotlin = '//',
+    swift = '//',
+    dart = '//',
+    go = '//',
+    rust = '//',
+    scala = '//',
+
+    python = '#',
+    ruby = '#',
+    perl = '#',
+    sh = '#',
+    bash = '#',
+    zsh = '#',
+    lua = '--',
+    gdscript = '#',
+
+    html = '<!--',
+    xml = '<!--',
+    svg = '<!--',
+    vue = '<!--',
+    svelte = '<!--',
+    php = '//',
+    css = '/*',
+    scss = '/*',
+
+    json = '//',
+    jsonc = '//',
+    yaml = '#',
+    toml = '#',
+
+    javascript = '//',
+    typescript = '//',
+    jsx = '//',
+    tsx = '//',
+  }
+
+  local prefix = comment_prefix_by_ft[ft] or '//'
+  local suffix = ''
+  if prefix == '<!--' then
+    suffix = ' -->'
+  elseif prefix == '/*' then
+    suffix = ' */'
+  end
+
+  local line = prefix .. ' ' .. relpath .. suffix
+
+  vim.api.nvim_buf_set_lines(buf, 0, 0, false, { line })
+end, { desc = 'Insert relative file path (cwd-based) as comment at top' })
+
+-- NOTE: Remove bg to show my waifu
 vim.cmd [[highlight Normal guibg=none]]
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
