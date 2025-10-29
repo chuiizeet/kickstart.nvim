@@ -395,11 +395,14 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          file_ignore_patterns = {
+            '%.gd%.uid$',
+          },
+          -- mappings = {
+          --   i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          -- },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -604,6 +607,7 @@ require('lazy').setup({
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      require('lspconfig').gdscript.setup(capabilities)
 
       local servers = {
         clangd = {},
@@ -1036,6 +1040,10 @@ require('lazy').setup({
         'javascript',
         'tsx',
         'css',
+        -- Godot
+        'gdscript',
+        'godot_resource',
+        'gdshader',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -1111,7 +1119,19 @@ require('lazy').setup({
 
 -- NOTE: Delete comments
 vim.api.nvim_create_user_command('DeleteComments', function()
-  vim.cmd [[g/^\s*\/\/\|^\s*\/\*/d]]
+  local ft = vim.bo.filetype
+
+  if ft == 'python' or ft == 'gdscript' then
+    vim.cmd [[g/^\s*#/d]]
+  elseif ft == 'javascript' or ft == 'typescript' or ft == 'c' or ft == 'cpp' or ft == 'java' or ft == 'dart' then
+    vim.cmd [[g/^\s*\/\/\|^\s*\/\*/d]]
+  elseif ft == 'lua' then
+    vim.cmd [[g/^\s*--/d]]
+  elseif ft == 'vim' then
+    vim.cmd [[g/^\s*"/d]]
+  else
+    print('File type not supported: ' .. ft)
+  end
 end, {
   desc = 'Delete all comments in the current buffer',
 })
