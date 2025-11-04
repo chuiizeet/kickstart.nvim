@@ -48,7 +48,6 @@ return {
       },
     }
 
-    -- 🎨 Configurar colores para que respeten tu tema
     vim.cmd [[
       highlight TerminalNormal guibg=NONE ctermbg=NONE
       highlight TerminalNormalNC guibg=NONE ctermbg=NONE
@@ -74,7 +73,6 @@ return {
       let g:terminal_color_15 = '#ffffff'
     ]]
 
-    -- ⚡ Función para terminal keymaps
     function _G.set_terminal_keymaps()
       local opts = { buffer = 0, silent = true }
       local bufname = vim.api.nvim_buf_get_name(0)
@@ -102,7 +100,6 @@ return {
       vim.keymap.set('t', '<C-Down>', [[<Cmd>resize -2<CR>]], opts)
     end
 
-    -- AutoCmd para aplicar keymaps
     vim.api.nvim_create_autocmd('TermOpen', {
       pattern = 'term://*',
       callback = function()
@@ -163,7 +160,6 @@ return {
 
     vim.keymap.set('n', '<leader>tg', '<cmd>lua _GIT_TOGGLE()<CR>', { desc = '📁 Git/Lazygit' })
 
-    -- 🎨 Auto-comando para mantener colores
     vim.api.nvim_create_autocmd('ColorScheme', {
       callback = function()
         vim.cmd [[

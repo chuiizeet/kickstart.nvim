@@ -1,5 +1,3 @@
--- Alpha.nvim setup con Jolteon eléctrico y degradado amarillo-naranja
-
 return {
   'goolord/alpha-nvim',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -7,7 +5,6 @@ return {
     local alpha = require 'alpha'
     local dashboard = require 'alpha.themes.dashboard'
 
-    -- ⚡ Jolteon ASCII Art Header - Energía eléctrica pura
     dashboard.section.header.val = {
       '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀',
       '⠀⠀⠀⠀⠀⠀⠀⠀⢱⡄⠀⠀⠀⠀⠀⠀⠀⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀',
@@ -36,7 +33,6 @@ return {
       '',
     }
 
-    -- ⚡ Botones temáticos eléctricos de Jolteon
     dashboard.section.buttons.val = {
       dashboard.button('f', '⚡   Search', ':Telescope find_files<CR>'),
       dashboard.button('r', '🌟   History', ':Telescope oldfiles<CR>'),
@@ -45,9 +41,7 @@ return {
       dashboard.button('q', '💫  Bye bye', ':qa<CR>'),
     }
 
-    -- 🧠 Función mejorada para obtener estadísticas más precisas
     local function get_enhanced_stats()
-      -- Método 1: Lazy.nvim stats
       local lazy_stats = { count = 0, loaded = 0, startup_time = 0 }
       local ok, lazy = pcall(require, 'lazy')
       if ok and type(lazy) == 'table' and type(lazy.stats) == 'function' then
@@ -59,13 +53,11 @@ return {
         }
       end
 
-      -- Método 2: Tiempo desde vim.fn.reltime() si está disponible
       local vim_startup_time = 0
       if vim.fn.has 'reltime' == 1 and vim.g.start_time then
         vim_startup_time = vim.fn.reltimefloat(vim.fn.reltime(vim.g.start_time)) * 1000
       end
 
-      -- Método 3: Usar luv.uptime() como alternativa
       local uptime_ms = 0
       local uv = vim.loop or vim.uv
       if uv and uv.uptime then
@@ -79,21 +71,18 @@ return {
       }
     end
 
-    -- ⚡ Footer dinámico con temática eléctrica de Jolteon
     local function create_footer()
       local stats = get_enhanced_stats()
       local footer_lines = {
         '⚡ Make beautiful thigs! ⚡',
       }
 
-      -- Plugins info con terminología eléctrica
       if stats.lazy.count > 0 then
         local loaded_text = stats.lazy.loaded > 0 and string.format('🔋 %d/%d electric powers active', stats.lazy.loaded, stats.lazy.count)
           or string.format('💡 %d lightning abilities learned', stats.lazy.count)
         table.insert(footer_lines, loaded_text)
       end
 
-      -- Tiempo de carga (priorizar el más preciso)
       local startup_time = 0
       local time_source = ''
 
@@ -116,7 +105,6 @@ return {
         table.insert(footer_lines, '💫 Instant electric shock! (< 1ms)')
       end
 
-      -- Info adicional con energía eléctrica
       table.insert(footer_lines, string.format('🎯 Neovim %s', vim.version().major .. '.' .. vim.version().minor))
 
       return footer_lines
@@ -124,7 +112,6 @@ return {
 
     dashboard.section.footer.val = create_footer()
 
-    -- ⚡ Degradado amarillo-naranja eléctrico perfecto para Jolteon
     vim.cmd [[
       " Degradado amarillo-naranja eléctrico y energético
       highlight JolteonLightYellow guifg=#FFFACD gui=bold
@@ -157,7 +144,6 @@ return {
 
     alpha.setup(dashboard.opts)
 
-    -- 🔄 Refresh footer cuando se carguen plugins
     vim.api.nvim_create_autocmd('User', {
       pattern = 'LazyVimStarted',
       callback = function()
@@ -166,7 +152,6 @@ return {
       end,
     })
 
-    -- ⚡ Mantener la energía eléctrica
     vim.api.nvim_create_autocmd('ColorScheme', {
       callback = function()
         vim.cmd [[
@@ -192,7 +177,6 @@ return {
       end,
     })
 
-    -- ⚡ Efecto de descarga eléctrica al iniciar
     vim.api.nvim_create_autocmd('VimEnter', {
       callback = function()
         if vim.fn.argc() == 0 then
@@ -203,7 +187,6 @@ return {
       end,
     })
 
-    -- 💡 Efecto de "chispa eléctrica" dinámico
     local jolteon_electric_colors = { 'JolteonAmber', 'JolteonOrange', 'JolteonElectric' }
     local color_index = 1
 
@@ -217,7 +200,6 @@ return {
       end,
     })
 
-    -- ⚡ Efecto de rayo ocasional (brillo súper intenso)
     vim.api.nvim_create_autocmd('CursorMoved', {
       callback = function()
         if vim.bo.filetype == 'alpha' and math.random(150) == 77 then
@@ -230,7 +212,6 @@ return {
       end,
     })
 
-    -- 🌟 Efecto de "Pin Missile" de colores (muy ocasional)
     vim.api.nvim_create_autocmd('InsertEnter', {
       callback = function()
         if math.random(100) == 25 then

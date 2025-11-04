@@ -191,29 +191,8 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
-vim.keymap.set('n', '<leader>gd', ':DiffviewOpen<CR>', { desc = 'View diff' })
-vim.keymap.set('n', '<leader>gh', ':DiffviewFileHistory %<CR>', { desc = 'Current file history' })
-vim.keymap.set('n', '<leader>gq', ':DiffviewClose<CR>', { desc = 'Close Diffview' })
-
--- NOTE: Avante keymaps
---
--- vim.keymap.set('n', '<leader>ai', ':AvanteAsk<CR>', { desc = 'Ask AI' })
--- vim.keymap.set('v', '<leader>ai', ':AvanteAsk<CR>', { desc = 'Ask AI (visual selection)' })
---
--- vim.keymap.set('v', '<leader>ax', ':AvanteAsk Explain this code<CR>', { desc = 'Explain code with AI' })
---
--- vim.keymap.set('v', '<leader>ae', ':AvanteEdit<CR>', { desc = 'Rewrite code with AI' })
---
--- vim.keymap.set('v', '<leader>ad', ':AvanteDoc<CR>', { desc = 'Document code with AI' })
--- vim.keymap.set('n', '<leader>ad', ':AvanteDoc<CR>', { desc = 'Document current line with AI' })
---
--- vim.keymap.set('n', '<leader>at', ':AvanteTest<CR>', { desc = 'Generate test (normal mode)' })
--- vim.keymap.set('v', '<leader>at', ':AvanteTest<CR>', { desc = 'Generate test (visual selection)' })
---
--- vim.keymap.set('n', '<leader>ah', ':AvanteHistory<CR>', { desc = 'View Avante history' })
---
--- vim.keymap.set('n', '<leader>aq', ':AvanteClose<CR>', { desc = 'Close current AI response' })
-vim.keymap.set('n', '<leader>aq', ':AvanteClear<CR>', { desc = 'Clear Avante chat' })
+-- NOTE: Misc keymaps
+vim.keymap.set('n', '<leader>bb', '<C-^>', { desc = 'Go to last buffer' })
 
 -- NOTE: Flutter
 
@@ -982,43 +961,6 @@ require('lazy').setup({
     },
   },
 
-  { -- Collection of various small independent plugins/modules
-    'echasnovski/mini.nvim',
-    config = function()
-      -- Better Around/Inside textobjects
-      --
-      -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [']quote
-      --  - ci'  - [C]hange [I]nside [']quote
-      require('mini.ai').setup { n_lines = 500 }
-
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
-
-      -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
-    end,
-  },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',

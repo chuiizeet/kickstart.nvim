@@ -6,13 +6,12 @@ return {
     require('bufferline').setup {
       options = {
         mode = 'buffers',
-        numbers = 'none', -- Sin números para minimalismo
+        numbers = 'none',
         close_command = 'bdelete! %d',
         right_mouse_command = 'bdelete! %d',
         left_mouse_command = 'buffer %d',
         middle_mouse_command = nil,
 
-        -- Indicador minimalista
         indicator = {
           icon = '',
           style = 'underline',
@@ -28,10 +27,9 @@ return {
         max_prefix_length = 15,
         truncate_names = true,
         tab_size = 18,
-        diagnostics = false, -- Sin diagnósticos para minimalismo
+        diagnostics = false,
         diagnostics_update_in_insert = false,
 
-        -- Offset para file explorer
         offsets = {
           {
             filetype = 'NvimTree',
@@ -66,32 +64,27 @@ return {
       },
 
       highlights = {
-        -- Buffer inactivo - minimalista
         background = {
           guifg = '#6c6c6c',
           guibg = 'NONE', -- Transparente
         },
 
-        -- Buffer activo - solo texto blanco
         buffer_selected = {
           guifg = '#ffffff',
           guibg = 'NONE', -- Transparente
           gui = 'NONE', -- Sin bold
         },
 
-        -- Buffer visible
         buffer_visible = {
           guifg = '#a0a0a0',
           guibg = 'NONE', -- Transparente
         },
 
-        -- Indicador sutil
         indicator_selected = {
           guifg = '#ffffff',
           guibg = 'NONE',
         },
 
-        -- Separadores invisibles
         separator = {
           guifg = 'NONE',
           guibg = 'NONE',
@@ -105,7 +98,6 @@ return {
           guibg = 'NONE',
         },
 
-        -- Modified minimalista
         modified = {
           guifg = '#ffffff',
           guibg = 'NONE',
@@ -115,12 +107,10 @@ return {
           guibg = 'NONE',
         },
 
-        -- Fill transparente
         fill = {
           guibg = 'NONE',
         },
 
-        -- Duplicados sutiles
         duplicate = {
           guifg = '#6c6c6c',
           guibg = 'NONE',
@@ -134,7 +124,6 @@ return {
       },
     }
 
-    -- Keymaps minimalistas
     vim.keymap.set('n', '<S-h>', '<cmd>BufferLineCyclePrev<cr>')
     vim.keymap.set('n', '<S-l>', '<cmd>BufferLineCycleNext<cr>')
     vim.keymap.set('n', '<leader>x', '<cmd>bdelete<cr>')
