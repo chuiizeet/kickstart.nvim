@@ -449,12 +449,6 @@ require('lazy').setup({
       -- used for completion, annotations and signatures of Neovim apis
       { 'folke/neodev.nvim', opts = {} },
     },
-    opts = function(_, opts)
-      local esp32 = require 'esp32'
-      opts.servers = opts.servers or {}
-      opts.servers.clangd = esp32.lsp_config()
-      return opts
-    end,
     config = function()
       -- Brief aside: **What is LSP?**
       --
@@ -583,13 +577,20 @@ require('lazy').setup({
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
       -- Create LSP capabilities using nvim-cmp capabilities
+      -- Create LSP capabilities using nvim-cmp capabilities
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
-      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
-      require('lspconfig').gdscript.setup(capabilities)
+      capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+      vim.lsp.config('gdscript', {
+        capabilities = capabilities,
+      })
+      vim.lsp.enable 'gdscript'
+
+      local esp32 = require 'esp32'
 
       local servers = {
-        clangd = {},
+        clangd = esp32.lsp_config(),
         black = {},
         html = {
           filetypes = { 'html', 'astro' }, -- se añade astro aquí para obtener autocompletado HTML
@@ -621,22 +622,17 @@ require('lazy').setup({
         eslint = {},
         ts_ls = {},
       }
-      require('lspconfig').sourcekit.setup {}
+
+      -- (Opcional) si quieres meter tu config de esp32 aquí en vez de opts:
+      -- local esp32 = require 'esp32'
+      -- servers.clangd = esp32.lsp_config()
 
       -- Ensure the servers and tools above are installed
-      --  To check the current status of installed tools and/or manually install
-      --  other tools, you can run
-      --    :Mason
-      --
-      --  You can press `g?` for help in this menu.
-      -- Setup Mason to manage LSP servers and tools
       require('mason').setup()
-      -- Add additional tools to be ensured installed (like stylua for Lua)
+
       local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, { 'stylua' })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      -- Configure Mason-Lspconfig to automatically install and setup servers
       require('mason-lspconfig').setup {
         ensure_installed = {
           'astro',
@@ -647,17 +643,28 @@ require('lazy').setup({
           'tailwindcss',
         },
         automatic_installation = true,
+
+        -- 🚨 Aquí antes usabas require('lspconfig')[server_name].setup
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+
+            -- Nuevo estilo Neovim 0.11+
+            vim.lsp.config(server_name, server)
+            vim.lsp.enable(server_name)
           end,
         },
       }
 
-      -- NOTE: Emmet
-      require('lspconfig').emmet_ls.setup {
+      -- NOTE: sourcekit (Swift) con nueva API
+      vim.lsp.config('sourcekit', {
+        capabilities = capabilities,
+      })
+      vim.lsp.enable 'sourcekit'
+
+      -- NOTE: Emmet con nueva API
+      vim.lsp.config('emmet_ls', {
         cmd = { 'emmet-ls', '--stdio' },
         filetypes = {
           'html',
@@ -677,7 +684,8 @@ require('lazy').setup({
           },
         },
         capabilities = capabilities,
-      }
+      })
+      vim.lsp.enable 'emmet_ls'
     end,
   },
 
@@ -720,8 +728,8 @@ require('lazy').setup({
         yaml = { 'prettier' },
         markdown = { 'prettier' },
         graphql = { 'prettier' },
-        lua = { 'stylua' },
-        python = { 'isort', 'black' },
+        lua = { 'lua_ls' },
+        python = { 'black' },
         swift = { 'swiftformat' },
         astro = { 'prettier' },
       },
