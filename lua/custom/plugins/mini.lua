@@ -23,13 +23,31 @@ return { -- Collection of various small independent plugins/modules
 
         c = {
           output = function()
-            return { left = 'Center(child: ', right = ',)' }
+            return { left = 'Container(child: ', right = ',)' }
           end,
         },
 
         e = {
           output = function()
             return { left = 'Expanded(child: ', right = ',)' }
+          end,
+        },
+
+        s = {
+          output = function()
+            return { left = 'Stack(children: [', right = '],)' }
+          end,
+        },
+
+        C = {
+          output = function()
+            return { left = 'Column(children: [', right = '],)' }
+          end,
+        },
+
+        R = {
+          output = function()
+            return { left = 'Row(children: [', right = '],)' }
           end,
         },
       },
