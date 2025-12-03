@@ -728,7 +728,7 @@ require('lazy').setup({
         yaml = { 'prettier' },
         markdown = { 'prettier' },
         graphql = { 'prettier' },
-        lua = { 'lua_ls' },
+        lua = { 'stylua' },
         python = { 'black' },
         swift = { 'swiftformat' },
         astro = { 'prettier' },
@@ -1154,6 +1154,43 @@ vim.api.nvim_create_user_command('InsertRelPath', function()
 
   vim.api.nvim_buf_set_lines(buf, 0, 0, false, { line })
 end, { desc = 'Insert relative file path (cwd-based) as comment at top' })
+
+local function insert_header_comment()
+  local title = vim.fn.input 'Header text: '
+  if not title or title == '' then
+    title = 'HEADER'
+  end
+
+  title = string.upper(title)
+
+  local cs = vim.bo.commentstring
+  local prefix
+
+  if cs and cs:match '%%s' then
+    prefix = cs:sub(1, cs:find '%%s' - 1)
+  else
+    prefix = '//'
+  end
+
+  prefix = prefix:gsub('%s+$', '')
+
+  local width = 41
+  local border = prefix .. ' ' .. string.rep('=', width)
+  local middle = prefix .. ' ' .. title
+
+  local lines = { border, middle, border }
+
+  local row = vim.api.nvim_win_get_cursor(0)[1] - 1
+  vim.api.nvim_buf_set_lines(0, row, row, false, lines)
+
+  vim.api.nvim_win_set_cursor(0, { row + 2, #middle })
+end
+
+_G.InsertHeaderComment = insert_header_comment
+
+vim.keymap.set('n', '<leader>hh', function()
+  insert_header_comment()
+end, { desc = 'Insert header comment block' })
 
 -- NOTE: Remove bg to show my waifu
 vim.cmd [[highlight Normal guibg=none]]
