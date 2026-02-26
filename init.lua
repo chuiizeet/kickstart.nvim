@@ -84,6 +84,11 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+-- NOTE: E325 neo-tree, swapfiles are for boomers tho
+-- ¯\_(ツ)_/¯
+vim.opt.swapfile = false
+vim.opt.undofile = true
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
