@@ -16,8 +16,15 @@ return {
   opts = {
     filesystem = {
       filtered_items = {
+        visible = false,
+        hide_dotfiles = true,
+        hide_gitignored = true,
         hide_by_pattern = {
           '*.gd.uid',
+        },
+        never_show = {
+          'node_modules',
+          '.git',
         },
       },
       window = {
