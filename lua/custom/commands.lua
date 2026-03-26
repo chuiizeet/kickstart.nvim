@@ -1,5 +1,20 @@
 -- Custom user commands and functions
 
+-- Auto-reload files changed outside nvim
+vim.opt.autoread = true
+vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
+  command = 'silent! checktime',
+})
+
+-- Refresh neo-tree git status on external changes
+vim.api.nvim_create_autocmd({ 'FocusGained', 'TermClose', 'BufWritePost' }, {
+  callback = function()
+    if package.loaded['neo-tree.sources.manager'] then
+      require('neo-tree.sources.manager').refresh('filesystem')
+    end
+  end,
+})
+
 -- NOTE: Delete emojis
 vim.api.nvim_create_user_command('DeleteEmojis', function()
   vim.cmd [[%s/\v[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F\U0001FA70-\U0001FAFF\U00002702-\U000027B0\U0000FE00-\U0000FE0F\U0000200D\U00002600-\U000026FF\U00002700-\U000027BF]//ge]]
