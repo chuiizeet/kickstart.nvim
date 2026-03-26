@@ -84,6 +84,10 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+-- Disable netrw so neo-tree handles directories
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- NOTE: E325 neo-tree, swapfiles are for boomers tho
 -- ¯\_(ツ)_/¯
 vim.opt.swapfile = false
@@ -226,7 +230,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
   vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
 end ---@diagnostic disable-next-line: undefined-field
@@ -256,8 +260,7 @@ require('lazy').setup({
   --  This is equivalent to:
   --    require('Comment').setup({})
 
-  -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  -- "gc" to comment visual regions/lines is built-in since Neovim 0.10+
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
@@ -450,9 +453,9 @@ require('lazy').setup({
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
 
-      -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
+      -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/neodev.nvim', opts = {} },
+      { 'folke/lazydev.nvim', ft = 'lua', opts = {} },
     },
     config = function()
       -- Brief aside: **What is LSP?**
@@ -592,11 +595,8 @@ require('lazy').setup({
       })
       vim.lsp.enable 'gdscript'
 
-      local esp32 = require 'esp32'
-
       local servers = {
-        clangd = esp32.lsp_config(),
-        black = {},
+        clangd = {},
         html = {
           filetypes = { 'html', 'astro' }, -- se añade astro aquí para obtener autocompletado HTML
         },
@@ -766,7 +766,7 @@ require('lazy').setup({
             'rafamadriz/friendly-snippets',
             config = function()
               require('luasnip.loaders.from_vscode').lazy_load()
-            end,
+            end, -- friendly-snippets loads here, no need to call again below
           },
         },
       },
@@ -787,9 +787,6 @@ require('lazy').setup({
       local lspkind = require 'lspkind'
 
       luasnip.config.setup {}
-
-      -- Load friendly snippets
-      require('luasnip.loaders.from_vscode').lazy_load()
 
       cmp.setup {
         snippet = {
@@ -877,101 +874,18 @@ require('lazy').setup({
 
       vim.cmd.colorscheme 'gruvbox'
 
-      -- Opcional: override para ventanas flotantes o plugins
-      vim.api.nvim_set_hl(0, 'Normal', { bg = 'none' })
       vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
       vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = 'none' })
       vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = 'none' })
     end,
   },
 
-  -- { -- You can easily change to a different colorscheme.
-  --   -- Change the name of the colorscheme plugin below, and then
-  --   -- change the command in the config to whatever the name of that colorscheme is.
-  --   --
-  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   init = function()
-  --     -- Load the colorscheme here.
-  --     -- Like many other themes, this one has different styles, and you could load
-  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  --     vim.cmd.colorscheme 'tokyonight-storm'
-  --     -- You can configure highlights by doing something like:
-  --     vim.cmd.hi 'Comment gui=none'
-  --   end,
-  -- },
-
   -- Highlight todo, notes, etc in comments
   {
     'folke/todo-comments.nvim',
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = {
-
-      signs = true, -- show icons in the signs column
-      sign_priority = 8, -- sign priority
-      -- keywords recognized as todo comments
-      keywords = {
-        FIX = {
-          icon = ' ', -- icon used for the sign, and in search results
-          color = 'error', -- can be a hex color, or a named color (see below)
-          alt = { 'FIXME', 'BUG', 'FIXIT', 'ISSUE' }, -- a set of other keywords that all map to this FIX keywords
-          -- signs = false, -- configure signs for some keywords individually
-        },
-        TODO = { icon = ' ', color = 'info' },
-        HACK = { icon = ' ', color = 'warning' },
-        WARN = { icon = ' ', color = 'warning', alt = { 'WARNING', 'XXX' } },
-        PERF = { icon = ' ', alt = { 'OPTIM', 'PERFORMANCE', 'OPTIMIZE' } },
-        NOTE = { icon = ' ', color = 'hint', alt = { 'INFO' } },
-        TEST = { icon = '⏲ ', color = 'test', alt = { 'TESTING', 'PASSED', 'FAILED' } },
-      },
-      gui_style = {
-        fg = 'NONE', -- The gui style to use for the fg highlight group.
-        bg = 'BOLD', -- The gui style to use for the bg highlight group.
-      },
-      merge_keywords = true, -- when true, custom keywords will be merged with the defaults
-      -- highlighting of the line containing the todo comment
-      -- * before: highlights before the keyword (typically comment characters)
-      -- * keyword: highlights of the keyword
-      -- * after: highlights after the keyword (todo text)
-      highlight = {
-        multiline = true, -- enable multine todo comments
-        multiline_pattern = '^.', -- lua pattern to match the next multiline from the start of the matched keyword
-        multiline_context = 10, -- extra lines that will be re-evaluated when changing a line
-        before = '', -- "fg" or "bg" or empty
-        keyword = 'wide', -- "fg", "bg", "wide", "wide_bg", "wide_fg" or empty. (wide and wide_bg is the same as bg, but will also highlight surrounding characters, wide_fg acts accordingly but with fg)
-        after = 'fg', -- "fg" or "bg" or empty
-        pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlighting (vim regex)
-        comments_only = true, -- uses treesitter to match keywords in comments only
-        max_line_len = 400, -- ignore lines longer than this
-        exclude = {}, -- list of file types to exclude highlighting
-      },
-      -- list of named colors where we try to extract the guifg from the
-      -- list of highlight groups or use the hex color if hl not found as a fallback
-      colors = {
-        error = { 'DiagnosticError', 'ErrorMsg', '#DC2626' },
-        warning = { 'DiagnosticWarn', 'WarningMsg', '#FBBF24' },
-        info = { 'DiagnosticInfo', '#2563EB' },
-        hint = { 'DiagnosticHint', '#10B981' },
-        default = { 'Identifier', '#7C3AED' },
-        test = { 'Identifier', '#FF00FF' },
-      },
-      search = {
-        command = 'rg',
-        args = {
-          '--color=never',
-          '--no-heading',
-          '--with-filename',
-          '--line-number',
-          '--column',
-        },
-        -- regex that will be used to match keywords.
-        -- don't replace the (KEYWORDS) placeholder
-        pattern = [[\b(KEYWORDS):]], -- ripgrep regex
-        -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
-      },
-    },
+    opts = { signs = true },
   },
 
   { -- Highlight, edit, and navigate code
@@ -1038,7 +952,7 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  require 'kickstart.plugins.indent_line',
+  -- indent guides handled by custom/plugins/indent-blankline (rainbow)
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
@@ -1072,130 +986,4 @@ require('lazy').setup({
   },
 })
 
--- NOTE: Delete comments
-vim.api.nvim_create_user_command('DeleteComments', function()
-  local ft = vim.bo.filetype
-
-  if ft == 'python' or ft == 'gdscript' then
-    vim.cmd [[g/^\s*#/d]]
-  elseif ft == 'javascript' or ft == 'typescript' or ft == 'c' or ft == 'cpp' or ft == 'java' or ft == 'dart' then
-    vim.cmd [[g/^\s*\/\/\|^\s*\/\*/d]]
-  elseif ft == 'lua' then
-    vim.cmd [[g/^\s*--/d]]
-  elseif ft == 'vim' then
-    vim.cmd [[g/^\s*"/d]]
-  else
-    print('File type not supported: ' .. ft)
-  end
-end, {
-  desc = 'Delete all comments in the current buffer',
-})
-
--- NOTE: Insert Rel path for some llms
-vim.api.nvim_create_user_command('InsertRelPath', function()
-  local buf = vim.api.nvim_get_current_buf()
-
-  local filepath = vim.fn.expand '%:p'
-  local cwd = vim.fn.getcwd()
-  local relpath = filepath:gsub('^' .. vim.pesc(cwd), '')
-  if relpath == '' then
-    relpath = '/' .. vim.fn.expand '%:t'
-  end
-
-  -- 2️⃣ Filetype
-  local ft = vim.bo.filetype
-
-  local comment_prefix_by_ft = {
-    c = '//',
-    cpp = '//',
-    h = '//',
-    hpp = '//',
-    java = '//',
-    kotlin = '//',
-    swift = '//',
-    dart = '//',
-    go = '//',
-    rust = '//',
-    scala = '//',
-
-    python = '#',
-    ruby = '#',
-    perl = '#',
-    sh = '#',
-    bash = '#',
-    zsh = '#',
-    lua = '--',
-    gdscript = '#',
-
-    html = '<!--',
-    xml = '<!--',
-    svg = '<!--',
-    vue = '<!--',
-    svelte = '<!--',
-    php = '//',
-    css = '/*',
-    scss = '/*',
-
-    json = '//',
-    jsonc = '//',
-    yaml = '#',
-    toml = '#',
-
-    javascript = '//',
-    typescript = '//',
-    jsx = '//',
-    tsx = '//',
-  }
-
-  local prefix = comment_prefix_by_ft[ft] or '//'
-  local suffix = ''
-  if prefix == '<!--' then
-    suffix = ' -->'
-  elseif prefix == '/*' then
-    suffix = ' */'
-  end
-
-  local line = prefix .. ' ' .. relpath .. suffix
-
-  vim.api.nvim_buf_set_lines(buf, 0, 0, false, { line })
-end, { desc = 'Insert relative file path (cwd-based) as comment at top' })
-
-local function insert_header_comment()
-  local title = vim.fn.input 'Header text: '
-  if not title or title == '' then
-    title = 'HEADER'
-  end
-
-  title = string.upper(title)
-
-  local cs = vim.bo.commentstring
-  local prefix
-
-  if cs and cs:match '%%s' then
-    prefix = cs:sub(1, cs:find '%%s' - 1)
-  else
-    prefix = '//'
-  end
-
-  prefix = prefix:gsub('%s+$', '')
-
-  local width = 41
-  local border = prefix .. ' ' .. string.rep('=', width)
-  local middle = prefix .. ' ' .. title
-
-  local lines = { border, middle, border }
-
-  local row = vim.api.nvim_win_get_cursor(0)[1] - 1
-  vim.api.nvim_buf_set_lines(0, row, row, false, lines)
-
-  vim.api.nvim_win_set_cursor(0, { row + 2, #middle })
-end
-
-_G.InsertHeaderComment = insert_header_comment
-
-vim.keymap.set('n', '<leader>hh', function()
-  insert_header_comment()
-end, { desc = 'Insert header comment block' })
-
--- NOTE: Remove bg to show my waifu
-vim.cmd [[highlight Normal guibg=none]]
+require 'custom.commands'

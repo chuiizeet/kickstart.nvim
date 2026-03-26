@@ -1,6 +1,5 @@
 return {
   require 'custom.plugins.flutter',
-  require 'custom.plugins.dingllm',
   require 'custom.plugins.indent-blankline',
   require 'custom.plugins.xcodebuild',
   require 'custom.plugins.vim-visual-multi',
@@ -9,7 +8,6 @@ return {
   require 'custom.plugins.snacks',
   require 'custom.plugins.bufferline',
   require 'custom.plugins.noice',
-  require 'custom.plugins.esp',
   require 'custom.plugins.nvim-treesitter-textobjects',
   require 'custom.plugins.mini',
 }

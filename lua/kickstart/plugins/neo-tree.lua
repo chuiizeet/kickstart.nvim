@@ -13,6 +13,17 @@ return {
   keys = {
     { '\\', ':Neotree reveal<CR>', { desc = 'NeoTree reveal' } },
   },
+  -- init = function()
+  --   -- Load neo-tree early when opening a directory
+  --   vim.api.nvim_create_autocmd('BufEnter', {
+  --     once = true,
+  --     callback = function(args)
+  --       if vim.fn.isdirectory(vim.fn.expand '%:p') == 1 then
+  --         require 'neo-tree'
+  --       end
+  --     end,
+  --   })
+  -- end,
   opts = {
     filesystem = {
       filtered_items = {
