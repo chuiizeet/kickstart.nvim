@@ -2,7 +2,7 @@ return {
   -- NOTE: This is for flutter dev
   {
     'akinsho/flutter-tools.nvim',
-    lazy = false,
+    ft = 'dart',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'stevearc/dressing.nvim', -- optional for vim.ui.select
@@ -50,6 +50,14 @@ return {
           updateImportsOnRename = true, -- Whether to update imports and other directives when files are renamed. Required for `FlutterRename` command.
         },
       }
+
+      vim.keymap.set('n', '<leader>fr', '<cmd>FlutterRun<CR>', { desc = 'Flutter Run' })
+      vim.keymap.set('n', '<leader>fd', '<cmd>FlutterDevices<CR>', { desc = 'Select Device' })
+      vim.keymap.set('n', '<leader>fq', '<cmd>FlutterQuit<CR>', { desc = 'Quit Flutter' })
+      vim.keymap.set('n', '<leader>fR', '<cmd>FlutterRestart<CR>', { desc = 'Hot Restart' })
+      vim.keymap.set('n', '<leader>fh', '<cmd>FlutterHotReload<CR>', { desc = 'Hot Reload' })
+      vim.keymap.set('n', '<leader>fl', '<cmd>FlutterLogClear<CR>', { desc = 'Clear Logs' })
+      vim.keymap.set('n', '<leader>ft', '<cmd>FlutterLogToggle<CR>', { desc = 'Toggle log window' })
     end,
   },
 }
