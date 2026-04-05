@@ -10,7 +10,7 @@ vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter', 'CursorHold' }, {
 vim.api.nvim_create_autocmd({ 'FocusGained', 'TermClose', 'BufWritePost' }, {
   callback = function()
     if package.loaded['neo-tree.sources.manager'] then
-      require('neo-tree.sources.manager').refresh('filesystem')
+      require('neo-tree.sources.manager').refresh 'filesystem'
     end
   end,
 })
@@ -144,3 +144,10 @@ _G.InsertHeaderComment = insert_header_comment
 vim.keymap.set('n', '<leader>hh', function()
   insert_header_comment()
 end, { desc = 'Insert header comment block' })
+
+-- NOTE: Open current project in Finder
+vim.api.nvim_create_user_command('OpenInFinder', function()
+  vim.fn.system('open ' .. vim.fn.getcwd())
+end, { desc = 'Open current working directory in Finder' })
+
+vim.keymap.set('n', '<leader>of', '<cmd>OpenInFinder<CR>', { desc = 'Open in Finder' })
