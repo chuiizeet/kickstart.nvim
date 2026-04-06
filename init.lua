@@ -203,7 +203,6 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- NOTE: Misc keymaps
 vim.keymap.set('n', '<leader>bb', '<C-^>', { desc = 'Go to last buffer' })
 
-
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -843,26 +842,15 @@ require('lazy').setup({
   },
 
   {
-    'ellisonleao/gruvbox.nvim',
+    'rebelot/kanagawa.nvim',
     priority = 1000,
     config = function()
-      require('gruvbox').setup {
-        terminal_colors = true,
-        undercurl = true,
-        underline = true,
-        bold = true,
-        italic = {
-          strings = true,
-          emphasis = true,
-          comments = true,
-          operators = false,
-          folds = true,
-        },
-        contrast = 'hard', -- o "soft" o "medium"
-        transparent_mode = true,
+      require('kanagawa').setup {
+        transparent = true,
+        theme = 'wave',
       }
 
-      vim.cmd.colorscheme 'gruvbox'
+      vim.cmd.colorscheme 'kanagawa'
 
       vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
       vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = 'none' })
