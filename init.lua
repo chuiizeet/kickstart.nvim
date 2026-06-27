@@ -842,19 +842,16 @@ require('lazy').setup({
   },
 
   {
-    'rebelot/kanagawa.nvim',
+    'EdenEast/nightfox.nvim',
     priority = 1000,
     config = function()
-      require('kanagawa').setup {
-        transparent = true,
-        theme = 'wave',
+      require('nightfox').setup {
+        options = {
+          transparent = false,
+        },
       }
 
-      vim.cmd.colorscheme 'kanagawa'
-
-      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'NeoTreeNormal', { bg = 'none' })
-      vim.api.nvim_set_hl(0, 'NeoTreeNormalNC', { bg = 'none' })
+      vim.cmd.colorscheme 'carbonfox'
     end,
   },
 
@@ -863,7 +860,13 @@ require('lazy').setup({
     'folke/todo-comments.nvim',
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = { signs = true },
+    opts = {
+      signs = true,
+      keywords = {
+        WARN = { color = '#ffd866' },
+        HACK = { color = '#fc9867' },
+      },
+    },
   },
 
   { -- Highlight, edit, and navigate code

@@ -5,7 +5,7 @@ return {
     config = function()
       require('lualine').setup {
         options = {
-          theme = 'kanagawa',
+          theme = 'carbonfox',
           component_separators = { left = '', right = '' },
           section_separators = { left = '', right = '' },
           icons_enabled = true,
