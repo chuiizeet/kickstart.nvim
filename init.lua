@@ -891,6 +891,8 @@ require('lazy').setup({
         'gdscript',
         'godot_resource',
         'gdshader',
+        -- Swift / iOS
+        'swift',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
