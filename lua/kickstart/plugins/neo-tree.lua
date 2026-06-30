@@ -11,7 +11,13 @@ return {
   },
   cmd = 'Neotree',
   keys = {
-    { '\\', ':Neotree reveal<CR>', { desc = 'NeoTree reveal' } },
+    {
+      '\\',
+      function()
+        require('neo-tree.command').execute { action = 'focus' }
+      end,
+      desc = 'NeoTree reveal & focus',
+    },
   },
   -- Si nvim se abre con un directorio (ej: `nvim .`), forzar carga de neo-tree
   -- para que su autocmd de hijack abra el explorador en lugar de un buffer vacío.
@@ -36,11 +42,6 @@ return {
         never_show = {
           'node_modules',
           '.git',
-        },
-      },
-      window = {
-        mappings = {
-          ['\\'] = 'close_window',
         },
       },
     },

@@ -83,6 +83,7 @@ return {
           or string.match(bufname, 'htop')
           or string.match(bufname, 'cmus')
           or string.match(bufname, 'ncmpcpp')
+          or string.match(bufname, 'claude')
         )
       then
         vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)

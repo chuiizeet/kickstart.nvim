@@ -842,16 +842,15 @@ require('lazy').setup({
   },
 
   {
-    'EdenEast/nightfox.nvim',
+    'rebelot/kanagawa.nvim',
     priority = 1000,
     config = function()
-      require('nightfox').setup {
-        options = {
-          transparent = false,
-        },
+      require('kanagawa').setup {
+        theme = 'dragon', -- wave, dragon, lotus
+        transparent = false,
       }
 
-      vim.cmd.colorscheme 'carbonfox'
+      vim.cmd.colorscheme 'kanagawa'
     end,
   },
 
