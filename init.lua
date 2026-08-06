@@ -850,7 +850,7 @@ require('lazy').setup({
         transparent = false,
       }
 
-      vim.cmd.colorscheme 'kanagawa'
+      -- vim.cmd.colorscheme 'kanagawa' -- activo: solarized-osaka (lua/custom/plugins/solarized-osaka.lua)
     end,
   },
 
@@ -860,8 +860,20 @@ require('lazy').setup({
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
     keys = {
-      { ']t', function() require('todo-comments').jump_next() end, desc = 'Next todo comment' },
-      { '[t', function() require('todo-comments').jump_prev() end, desc = 'Prev todo comment' },
+      {
+        ']t',
+        function()
+          require('todo-comments').jump_next()
+        end,
+        desc = 'Next todo comment',
+      },
+      {
+        '[t',
+        function()
+          require('todo-comments').jump_prev()
+        end,
+        desc = 'Prev todo comment',
+      },
     },
     opts = {
       signs = true,
