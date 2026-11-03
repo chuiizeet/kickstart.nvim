@@ -615,6 +615,7 @@ require('lazy').setup({
         },
         eslint = {},
         ts_ls = {},
+        svelte = {},
       }
 
       -- (Opcional) si quieres meter tu config de esp32 aquí en vez de opts:
@@ -985,3 +986,4 @@ require('lazy').setup({
 })
 
 require 'custom.commands'
+require 'custom.transparency'

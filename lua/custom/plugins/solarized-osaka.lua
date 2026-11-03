@@ -5,16 +5,26 @@ return {
   config = function()
     vim.o.background = 'dark'
 
-    require('solarized-osaka').setup {
-      transparent = false,
-      styles = {
-        comments = { italic = true },
-        keywords = { italic = true },
-      },
-      -- on_colors = function(colors) end,      -- override colores
-      -- on_highlights = function(hl, c) end,   -- override highlight groups
-    }
+    local transparency = require 'custom.transparency'
 
-    vim.cmd.colorscheme 'solarized-osaka'
+    local function load(transparent)
+      require('solarized-osaka').setup {
+        transparent = transparent,
+        styles = {
+          comments = { italic = true },
+          keywords = { italic = true },
+          sidebars = transparent and 'transparent' or 'dark',
+          floats = transparent and 'transparent' or 'dark',
+        },
+        -- on_colors = function(colors) end,      -- override colores
+        -- on_highlights = function(hl, c) end,   -- override highlight groups
+      }
+
+      vim.cmd.colorscheme 'solarized-osaka'
+    end
+
+    -- <leader>bg / :Transparency recargan el tema por aquí
+    transparency.setup { reload = load }
+    load(transparency.enabled)
   end,
 }
