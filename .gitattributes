@@ -1,0 +1,11 @@
+# lazy-lock.json se comparte entre máquinas, así que un `git pull` con updates
+# en ambos lados choca. Con `-merge` git no intenta mezclarlo línea por línea:
+# marca el conflicto pero deja tu versión intacta y parseable, en vez de
+# escribir marcadores <<<<<<< dentro del JSON y romperlo para lazy.
+#
+# Para resolver, nunca editar a mano -- quedarse con un lado entero:
+#   git checkout --theirs lazy-lock.json   # el del repo
+#   git checkout --ours   lazy-lock.json   # el local
+#   git add lazy-lock.json && git commit
+#   nvim --headless "+Lazy! restore" +qa
+lazy-lock.json -merge
