@@ -54,24 +54,64 @@ return {
       highlight ToggleTermBorder guifg=#FFA500 gui=bold
       highlight ToggleTermFloat guibg=NONE
       highlight ToggleTermNormal guibg=NONE ctermbg=NONE
-      
-      let g:terminal_color_0  = '#1e1e1e'
-      let g:terminal_color_1  = '#ff6b6b'
-      let g:terminal_color_2  = '#51cf66'
-      let g:terminal_color_3  = '#ffd43b'
-      let g:terminal_color_4  = '#74c0fc'
-      let g:terminal_color_5  = '#f783ac'
-      let g:terminal_color_6  = '#3bc9db'
-      let g:terminal_color_7  = '#f8f9fa'
-      let g:terminal_color_8  = '#495057'
-      let g:terminal_color_9  = '#ff8787'
-      let g:terminal_color_10 = '#8ce99a'
-      let g:terminal_color_11 = '#FFD700'
-      let g:terminal_color_12 = '#91a7ff'
-      let g:terminal_color_13 = '#ffa8cc'
-      let g:terminal_color_14 = '#66d9ef'
-      let g:terminal_color_15 = '#ffffff'
     ]]
+
+    -- Colores ANSI del `:terminal`.
+    --
+    -- Antes estaban hardcodeados aquí y no tenían nada que ver con el tema. Ya
+    -- no: los define el propio colorscheme (solarized-osaka lo hace con
+    -- `terminal_colors = true`, que es el default), así que cambian solos al
+    -- cambiar de tema.
+    --
+    -- Lo único que hacemos es reparar dos degeneraciones que trae el mapeo de
+    -- solarized-osaka (y varios temas más) y que dejan texto ilegible:
+    --
+    --   * `terminal_color_8` (bright black) sale igual que el 0, que es el
+    --     fondo. Todo lo que se pinte en bright-black --que es casi todo lo
+    --     "tenue": lazygit, `ls`, diffs-- queda invisible.
+    --   * Los brillantes 9-15 son idénticos a los normales 1-7, así que no se
+    --     distinguen.
+    --
+    -- Es a propósito que el 0 sí se quede igual al fondo: ANSI 0 se usa casi
+    -- siempre como color de fondo, no de texto, y que coincida es lo normal.
+    local function hl_fg(name)
+      local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
+      return hl.fg and string.format('#%06x', hl.fg) or nil
+    end
+
+    -- Aclara un color mezclándolo hacia blanco. amount: 0 = igual, 1 = blanco.
+    local function lighten(hex, amount)
+      local r, g, b = tostring(hex):match '^#(%x%x)(%x%x)(%x%x)$'
+      if not r then
+        return hex
+      end
+      local function mix(component)
+        local value = tonumber(component, 16)
+        return math.floor(value + (255 - value) * amount + 0.5)
+      end
+      return string.format('#%02x%02x%02x', mix(r), mix(g), mix(b))
+    end
+
+    local function same(a, b)
+      return a and b and tostring(a):lower() == tostring(b):lower()
+    end
+
+    local function fix_terminal_colors()
+      -- 8 = gris tenue. Si el tema lo dejó igual al 0, usar el color de los
+      -- comentarios, que por definición es legible sobre el fondo.
+      if same(vim.g.terminal_color_8, vim.g.terminal_color_0) then
+        vim.g.terminal_color_8 = hl_fg 'Comment' or lighten(vim.g.terminal_color_0, 0.35)
+      end
+
+      for i = 9, 15 do
+        local normal = vim.g['terminal_color_' .. (i - 8)]
+        if same(vim.g['terminal_color_' .. i], normal) then
+          vim.g['terminal_color_' .. i] = lighten(normal, 0.18)
+        end
+      end
+    end
+
+    fix_terminal_colors()
 
     function _G.set_terminal_keymaps()
       local opts = { buffer = 0, silent = true }
@@ -170,6 +210,9 @@ return {
           highlight TerminalNormal guibg=NONE ctermbg=NONE
           highlight TerminalNormalNC guibg=NONE ctermbg=NONE
         ]]
+        -- El tema acaba de reescribir los terminal_color_*, hay que volver a
+        -- repararlos.
+        fix_terminal_colors()
       end,
     })
   end,
