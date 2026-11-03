@@ -573,19 +573,37 @@ require('lazy').setup({
       --  By default, Neovim doesn't support everything that is in the LSP specification.
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
-      -- Create LSP capabilities using nvim-cmp capabilities
-      -- Create LSP capabilities using nvim-cmp capabilities
+      -- Capabilities de nvim-cmp. Se aplican a TODOS los servers mediante el
+      -- config comodín '*' (ver más abajo).
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.completion.completionItem.snippetSupport = true
       capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-      vim.lsp.config('gdscript', {
-        capabilities = capabilities,
-      })
-      vim.lsp.enable 'gdscript'
+      -- Servers que instala mason. Son nombres de lspconfig: mason-tool-installer
+      -- y mason-lspconfig los traducen al nombre del paquete de mason.
+      local mason_servers = {
+        'astro',
+        'clangd',
+        'cssls',
+        'emmet_ls',
+        'eslint',
+        'html',
+        'lua_ls',
+        'svelte',
+        'tailwindcss',
+        'ts_ls',
+      }
 
-      local servers = {
-        clangd = {},
+      -- Overrides por server. Aquí va SOLO lo que añade algo sobre el default de
+      -- nvim-lspconfig; lo que no aparece usa el default, que normalmente es
+      -- mejor (p.ej. el `cmd` de astro y svelte es una función que prefiere el
+      -- binario de node_modules/.bin antes que el global).
+      --
+      -- OJO con `filetypes`: REEMPLAZA la lista del default, no la extiende.
+      -- Por eso tailwindcss no lleva `filetypes`: el default ya trae 50
+      -- (svelte, scss, sass, less, vue, markdown...) y acotarlo a mano los
+      -- perdería.
+      local server_opts = {
         html = {
           filetypes = { 'html', 'astro' }, -- se añade astro aquí para obtener autocompletado HTML
         },
@@ -598,89 +616,67 @@ require('lazy').setup({
             },
           },
         },
-        astro = {
-          cmd = { 'astro-ls', '--stdio' },
-          filetypes = { 'astro' },
-          init_options = {
-            typescript = {},
-          },
-        },
         tailwindcss = {
-          filetypes = { 'html', 'astro', 'css', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
           init_options = {
             userLanguages = {
               astro = 'html',
             },
           },
         },
-        eslint = {},
-        ts_ls = {},
-        svelte = {},
+        -- emmet-ls lo instala mason, pero acotamos los filetypes a mano.
+        emmet_ls = {
+          cmd = { 'emmet-ls', '--stdio' },
+          filetypes = {
+            'html',
+            'css',
+            'scss',
+            'javascriptreact',
+            'typescriptreact',
+            'vue',
+            'svelte',
+            'astro',
+          },
+          init_options = {
+            html = {
+              options = {
+                ['bem.enabled'] = true,
+              },
+            },
+          },
+        },
+        -- Estos dos no vienen de mason: sourcekit lo trae Xcode y gdscript lo
+        -- expone Godot por TCP. Van vacíos para que el bucle de abajo los
+        -- habilite con el default + las capabilities del comodin.
+        sourcekit = {},
+        gdscript = {},
       }
 
       -- (Opcional) si quieres meter tu config de esp32 aquí en vez de opts:
       -- local esp32 = require 'esp32'
-      -- servers.clangd = esp32.lsp_config()
+      -- server_opts.clangd = esp32.lsp_config()
 
-      -- Ensure the servers and tools above are installed
       require('mason').setup()
-
-      local ensure_installed = vim.tbl_keys(servers or {})
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+      require('mason-tool-installer').setup { ensure_installed = mason_servers }
 
       require('mason-lspconfig').setup {
-        ensure_installed = {
-          'astro',
-          'ts_ls',
-          'eslint',
-          'html',
-          'cssls',
-          'tailwindcss',
-        },
-        automatic_installation = true,
-
-        -- 🚨 Aquí antes usabas require('lspconfig')[server_name].setup
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-
-            -- Nuevo estilo Neovim 0.11+
-            vim.lsp.config(server_name, server)
-            vim.lsp.enable(server_name)
-          end,
-        },
+        ensure_installed = mason_servers,
+        -- NOTA: mason-lspconfig v2 eliminó `handlers` / `setup_handlers`. Lo que
+        -- habilita los servers es `automatic_enable` (true por defecto), que
+        -- llama a vim.lsp.enable() por cada paquete de mason instalado. La
+        -- configuración se hace con vim.lsp.config, debajo.
       }
 
-      -- NOTE: sourcekit (Swift) con nueva API
-      vim.lsp.config('sourcekit', {
-        capabilities = capabilities,
-      })
-      vim.lsp.enable 'sourcekit'
+      -- Esto va DESPUÉS de mason-lspconfig.setup() a propósito: vim.lsp.config
+      -- hace merge en orden de llamada, así que lo de aquí gana sobre los
+      -- defaults que registra mason.
+      vim.lsp.config('*', { capabilities = capabilities })
 
-      -- NOTE: Emmet con nueva API
-      vim.lsp.config('emmet_ls', {
-        cmd = { 'emmet-ls', '--stdio' },
-        filetypes = {
-          'html',
-          'css',
-          'scss',
-          'javascriptreact',
-          'typescriptreact',
-          'vue',
-          'svelte',
-          'astro',
-        },
-        init_options = {
-          html = {
-            options = {
-              ['bem.enabled'] = true,
-            },
-          },
-        },
-        capabilities = capabilities,
-      })
-      vim.lsp.enable 'emmet_ls'
+      for name, opts in pairs(server_opts) do
+        if next(opts) ~= nil then
+          vim.lsp.config(name, opts)
+        end
+        vim.lsp.enable(name)
+      end
     end,
   },
 
