@@ -883,6 +883,12 @@ require('lazy').setup({
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    -- La rama por defecto del repo ya es `main`, que es la reescritura y no
+    -- tiene ni `nvim-treesitter.configs` ni `install.prefer_git`, que es lo que
+    -- usa el config de abajo. Sin este pin, una instalación nueva agarra `main`
+    -- y revienta. Migrar a `main` es cambiar el setup de abajo y además instalar
+    -- el CLI de tree-sitter, que ahí es obligatorio.
+    branch = 'master',
     build = ':TSUpdate',
     opts = {
       ensure_installed = {
